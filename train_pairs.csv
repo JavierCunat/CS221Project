@@ -1,0 +1,13 @@
+name,specialty,location,hosp,ins,geo,spec,text,y_suggested,y
+Dr. Richard G. Kiel,Cardiology (Advanced Heart Failure & Transplant),"Clovis, CA",1.0,1.0,1.0,1.0,0.139,0.9139,0.80
+Dr. Sara Patel,Pulmonology,"Fresno, CA",1.0,1.0,1.0,1.0,0.259,0.9259,0.60
+Dr. Michael Zhang,Cardiology (General),"Fresno, CA",0.0,1.0,1.0,1.0,0.03,0.603,0.85
+Dr. Elena Ruiz,Cardiology (Heart Failure),"Fresno, CA",0.0,0.0,1.0,1.0,0.0,0.35,0.25
+Dr. Priya Nair,Internal Medicine,"Clovis, CA",1.0,1.0,1.0,1.0,0.14,0.914,0.25
+Dr. Anthony Morales,Cardiology (Advanced Heart Failure),"San Francisco, CA",0.0,1.0,0.3,1.0,0.03,0.463,0.60
+Dr. Linda Chen,Cardiology (General),"Bakersfield, CA",0.0,1.0,0.3,1.0,0.0,0.46,0.25
+Dr. Omar Haddad,Pulmonology (Thoracic Oncology),"Fresno, CA",1.0,1.0,1.0,1.0,0.245,0.9245,0.60
+Dr. Julia Park,Cardiology (Electrophysiology),"Clovis, CA",1.0,1.0,1.0,1.0,0.086,0.9086,0.25
+Dr. Steven Brooks,Vascular Surgery,"Fresno, CA",1.0,1.0,1.0,1.0,0.292,0.9292,0.90
+Dr. Maria Lopez,Family Medicine,"Fresno, CA",1.0,1.0,1.0,1.0,0.065,0.9065,0.80
+Dr. Kevin Nguyen,Cardiology (General),"Modesto, CA",0.0,1.0,0.3,1.0,0.0,0.46,0.25

@@ -311,6 +311,60 @@ Insurance: Medicare and major commercial plans (Aetna, Anthem, Blue Shield, Cign
 Referral Activation: pre-op optimization for CABG/valve, post-op HF co-management, cardiogenic shock/MCS coordination, CardioMEMS-enabled recovery pathways.
 """
 
+# --------- Training ------------
+
+import numpy as np
+import pandas as pd
+
+def project_to_simplex(w: np.ndarray) -> np.ndarray:
+    """
+    Project vector w onto the probability simplex:
+    { w_i >= 0, sum w_i = 1 } (Duchi et al. 2008).
+    Gaurantees sum-to-one weights
+    """
+    w = np.asarray(w, dtype=float)
+    if w.sum() == 1.0 and np.all(w >= 0):
+        return w
+    u = np.sort(w)[::-1]
+    cssv = np.cumsum(u)
+    rho = np.nonzero(u * np.arange(1, len(u)+1) > (cssv - 1))[0][-1]
+    theta = (cssv[rho] - 1) / (rho + 1.0)
+    return np.maximum(w - theta, 0.0)
+
+def fit_weights_from_csv(path="train_pairs.csv", l2=1e-3):
+    df = pd.read_csv(path) #use pandas to handle quoted commas and stuff
+
+    # Ensure numeric columns are numeric
+    for col in ["hosp","ins","geo","spec","text","y"]:
+        df[col] = pd.to_numeric(df[col], errors="coerce")
+
+    # (Optional) drop rows with missing labels/features
+    df = df.dropna(subset=["hosp","ins","geo","spec","text","y"])
+
+    X = df[["hosp","ins","geo","spec","text"]].to_numpy(dtype=float)
+    y = df["y"].to_numpy(dtype=float)
+
+    d = X.shape[1]
+    XtX = X.T @ X + l2 * np.eye(d) # ridge regression for stability
+    Xty = X.T @ y
+    w_hat = np.linalg.solve(XtX, Xty)
+    w_proj = project_to_simplex(w_hat) # keep weights >=0 and sum to 1
+
+    y_pred = X @ w_proj
+    mse = float(np.mean((y_pred - y) ** 2))
+    return w_proj, mse
+
+def save_weights_json(w: np.ndarray, path: str):
+    obj = {"hospitals": float(w[0]), "insurance": float(w[1]), "geography": float(w[2]), "specialty": float(w[3]), "text": float(w[4])}
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(obj, f, indent=2)
+
+def load_weights_json(path: str) -> Dict[str, float]:
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+
 # ---------- CLI ----------
 
 def main():
@@ -320,7 +374,24 @@ def main():
     parser.add_argument("--research", type=str, help="Path to research text file")
     parser.add_argument("--use-embeddings", action="store_true", help="Use sentence-transformers embeddings if available")
     parser.add_argument("--example", type=str, choices=["araim_kiel"], help="Run built-in example inputs")
+    parser.add_argument("--fit-from-csv", type=str, help="Path to train_pairs.csv to learn weights")
+    parser.add_argument("--save-weights", type=str, help="Where to save learned weights JSON")
+    parser.add_argument("--weights", type=str, help="Path to weights JSON to use for scoring")
     args = parser.parse_args()
+
+    # run based off different flags
+    if args.fit_from_csv:
+      w, mse = fit_weights_from_csv(args.fit_from_csv, l2=1e-3)
+      print("Learned weights [hosp, ins, geo, spec, text]:", [round(x,3) for x in w])
+      print("Train MSE:", round(mse, 4))
+      if args.save_weights:
+          save_weights_json(w, args.save_weights)
+          print("Saved weights to:", args.save_weights)
+
+
+    custom_weights = None
+    if args.weights:
+        custom_weights = load_weights_json(args.weights)
 
     if args.example == "araim_kiel":
         provider = ARAIM_PROVIDER
@@ -336,7 +407,11 @@ def main():
         with open(args.research, "r", encoding="utf-8") as f:
             research_text = f.read()
 
-    result = compute_compatibility(provider, specialist, research_text, use_embeddings=args.use_embeddings)
+    result = compute_compatibility(
+        provider, specialist, research_text,
+        use_embeddings=args.use_embeddings,
+        weights=custom_weights or DEFAULT_WEIGHTS
+    )
     print(json.dumps(result, indent=2, ensure_ascii=False))
 
 if __name__ == "__main__":
