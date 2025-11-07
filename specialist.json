@@ -1,0 +1,17 @@
+{
+  "name": "Dr. Richard G. Kiel",
+  "specialty": "Cardiology (Advanced Heart Failure & Transplant)",
+  "location": "Clovis, CA",
+  "hospital_affiliations": [
+    "Community Regional Medical Center",
+    "Clovis Community Medical Center"
+  ],
+  "accepted_insurance": [
+    "Medicare",
+    "Aetna",
+    "Anthem Blue Cross",
+    "Blue Shield of CA",
+    "Cigna",
+    "UnitedHealthcare"
+  ]
+}

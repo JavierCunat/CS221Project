@@ -1,0 +1,44 @@
+{
+  "referring_physician": {
+    "name": "Dr. Leheb H. Araim",
+    "specialty": "cardiothoracic surgeon",
+    "location": "Fresno, CA",
+    "hospital_affiliations": [
+      "Community Regional Medical Center",
+      "UCSF Fresno",
+      "Clovis Community Medical Center"
+    ],
+    "specialties": [
+      "cardiothoracic surgery",
+      "heart surgery",
+      "lung surgery",
+      "thoracic surgery"
+    ],
+    "practice_focus": "complex cardiac and thoracic procedures",
+    "accepted_insurance": [
+      "Medicare",
+      "Medi-Cal",
+      "Aetna",
+      "Anthem Blue Cross",
+      "Blue Shield of CA",
+      "Cigna",
+      "UnitedHealthcare",
+      "Health Net",
+      "TriCare/TriWest"
+    ]
+  },
+  "compatibility_factors": {
+    "referral_priorities": [
+      "clinical expertise",
+      "geographic proximity",
+      "cultural competency"
+    ]
+  },
+  "referral_context": {
+    "common_referral_scenarios": [
+      "advanced heart failure patients needing surgical evaluation",
+      "post-operative cardiac patients needing follow-up care",
+      "complex thoracic cases requiring multidisciplinary approach"
+    ]
+  }
+}
